@@ -54,7 +54,9 @@ You can see the run time.
 
 
 q1 is O(1)
+
 q2 is O(n)
+
 q4 is O(n)
 
 
