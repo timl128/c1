@@ -1,0 +1,47 @@
+/**
+Question 5
+I am using mariadb  Ver 15.1 Distrib 10.1.38-MariaDB(mysql)
+**/
+
+//a
+SELECT distinct s.Name FROM Orders o left join Customer c on o.CustomerID = c.CustomerID
+					   left join  Salesperson s on o.SalespersonID = s.SalespersonID
+                       where c.Name = 'George';
+
+
+//b
+SELECT distinct s.Name FROM Orders o left join Customer c on o.CustomerID = c.CustomerID
+					   left join  Salesperson s on o.SalespersonID = s.SalespersonID
+                       where c.Name != 'George';
+
+
+//c
+select Name from Salesperson  where SalesPersonId in (SELECT  SalesPersonId  FROM Orders o
+                        group by SalesPersonId having count(*) >= 2);
+
+/**
+Question 6
+
+**/
+
+//a
+select Name from Salesperson where SalesPersonId = (SELECT  SalesPersonId FROM Orders o
+                  group by SalesPersonId
+                  order by  sum(CostOfUnit * NumberOfUnits) desc limit 1 offset 2);
+
+//b
+create table BigOrders(
+    CustomerID INT,
+    TotalOrderValue INT
+)
+
+INSERT INTO BigOrders
+select CustomerId , sum(CostOfUnit * NumberOfUnits) as amount from Orders
+							group by CustomerId
+                            having amount > 100;
+
+//c
+SELECT YEAR(OrderDate),MONTH(OrderDate) ,sum(CostOfUnit * NumberOfUnits)  FROM cm.Orders
+
+GROUP BY MONTH(OrderDate) + '.' + YEAR(OrderDate)
+order by YEAR(OrderDate) desc , MONTH(OrderDate) desc
